@@ -21,7 +21,8 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
                 continue
             }
 
-            for (candidate in event.attendees) {
+            val attendeeList: List<Attendee> = event.attendees.clone() as List<Attendee>
+            for (candidate in attendeeList) {
                 val index = knownAttendees.indexOf(candidate)
                 if (index >= 0) {
                     // swap for known attendee
@@ -37,6 +38,11 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
     }
 
     fun scheduleAttendence(maxAttendeesPerEvent: Int) {
-        val allAttendees: Set<Attendee> = eventDates.flatMap { it.attendees }.toHashSet()
+        val allAttendees: MutableList<Attendee> = eventDates.flatMap { it.attendees }.toSet().toMutableList()
+        println("Scheduling ${allAttendees.size} attendees to ${eventDates.size} events.")
+
+        allAttendees.sortBy { it.getNumberOfPossibleDates(eventDates) }
+
+
     }
 }
