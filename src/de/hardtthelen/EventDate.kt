@@ -1,21 +1,25 @@
 package de.hardtthelen
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Date of an event
  */
-class EventDate(val startTime: LocalDateTime, val endTime: LocalDateTime) {
+const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+
+class EventDate(@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT) val startTime: Date,
+                @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT) val endTime: Date) {
     val attendees: ArrayList<Attendee> = ArrayList()
 
     override fun toString(): String {
-        val formatter : DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        val formatter : SimpleDateFormat = SimpleDateFormat(DATE_FORMAT)
         val sb : StringBuilder = StringBuilder()
         sb.append("Timeslot: ")
-        sb.append(startTime.format(formatter))
+        sb.append(formatter.format(startTime))
         sb.append(" - ")
-        sb.append(endTime.format(formatter))
+        sb.append(formatter.format(endTime))
         sb.append("\nAttendees:\n")
         for (attendee in attendees) {
             sb.append(attendee.name)

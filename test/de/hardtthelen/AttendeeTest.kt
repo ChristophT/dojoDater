@@ -1,9 +1,8 @@
 package de.hardtthelen
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
-import java.time.LocalDateTime
+import java.util.*
 
 /**
  * Tests for Attendee
@@ -57,7 +56,7 @@ class AttendeeTest {
     }
 
     private fun fillDateList(): ArrayList<EventDate> {
-        val dummyTime = LocalDateTime.now()
+        val dummyTime = Date()
         val other1: Attendee = Attendee("other1")
         val other2: Attendee = Attendee("other2")
         val other3: Attendee = Attendee("other3")
