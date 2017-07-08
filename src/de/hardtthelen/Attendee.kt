@@ -1,7 +1,7 @@
 package de.hardtthelen
 
 /**
- * Dojo attendee
+ * Event attendee
  */
 class Attendee(val name : String) {
 
