@@ -5,7 +5,7 @@ package de.hardtthelen
  */
 class Attendee(val name : String) {
 
-    fun getNumberOfPossibleDates(dates : List<DojoDate>) : Int {
+    fun getNumberOfPossibleDates(dates : List<EventDate>) : Int {
         return dates.filter { it.attendees.contains(this) }.count()
     }
 

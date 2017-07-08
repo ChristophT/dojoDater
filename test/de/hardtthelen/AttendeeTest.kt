@@ -12,7 +12,7 @@ class AttendeeTest {
     @Test
     fun getNumberOfPossibleDates_0() {
         val cand : Attendee = Attendee("tester")
-        val dates: ArrayList<DojoDate> = fillDateList()
+        val dates: ArrayList<EventDate> = fillDateList()
 
         val result = cand.getNumberOfPossibleDates(dates)
 
@@ -22,7 +22,7 @@ class AttendeeTest {
     @Test
     fun getNumberOfPossibleDates_1() {
         val cand : Attendee = Attendee("tester")
-        val dates: ArrayList<DojoDate> = fillDateList()
+        val dates: ArrayList<EventDate> = fillDateList()
 
         dates[1].attendees.add(cand)
         val result = cand.getNumberOfPossibleDates(dates)
@@ -33,7 +33,7 @@ class AttendeeTest {
     @Test
     fun getNumberOfPossibleDates_2() {
         val cand : Attendee = Attendee("tester")
-        val dates: ArrayList<DojoDate> = fillDateList()
+        val dates: ArrayList<EventDate> = fillDateList()
 
         dates[1].attendees.add(cand)
         dates[3].attendees.add(cand)
@@ -45,7 +45,7 @@ class AttendeeTest {
     @Test
     fun getNumberOfPossibleDates_4() {
         val cand : Attendee = Attendee("tester")
-        val dates: ArrayList<DojoDate> = fillDateList()
+        val dates: ArrayList<EventDate> = fillDateList()
 
         dates[0].attendees.add(cand)
         dates[1].attendees.add(cand)
@@ -56,16 +56,16 @@ class AttendeeTest {
         assertEquals(4, result)
     }
 
-    private fun fillDateList(): ArrayList<DojoDate> {
+    private fun fillDateList(): ArrayList<EventDate> {
         val dummyTime = LocalDateTime.now()
         val other1: Attendee = Attendee("other1")
         val other2: Attendee = Attendee("other2")
         val other3: Attendee = Attendee("other3")
-        val dates: ArrayList<DojoDate> = ArrayList()
-        val date1: DojoDate = DojoDate(dummyTime, dummyTime)
-        val date2: DojoDate = DojoDate(dummyTime, dummyTime)
-        val date3: DojoDate = DojoDate(dummyTime, dummyTime)
-        val date4: DojoDate = DojoDate(dummyTime, dummyTime)
+        val dates: ArrayList<EventDate> = ArrayList()
+        val date1: EventDate = EventDate(dummyTime, dummyTime)
+        val date2: EventDate = EventDate(dummyTime, dummyTime)
+        val date3: EventDate = EventDate(dummyTime, dummyTime)
+        val date4: EventDate = EventDate(dummyTime, dummyTime)
 
         date1.attendees.add(other1)
         date1.attendees.add(other2)
