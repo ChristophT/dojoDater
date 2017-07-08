@@ -5,8 +5,19 @@ package de.hardtthelen
  */
 class Attendee(val name : String) {
 
-    fun getNumberOfPossibleDates(dates : List<EventDate>) : Int {
-        return dates.filter { it.attendees.contains(this) }.count()
+    var chosenEvent: EventDate? = null
+
+    private var availableDates: List<EventDate>? = null
+
+    fun getNumberOfAvailableDates(dates: List<EventDate>): Int {
+        return getAvailableDates(dates).count()
+    }
+
+    fun getAvailableDates(dates: List<EventDate>): List<EventDate> {
+        if (availableDates == null) {
+            availableDates = dates.filter { it.attendees.contains(this) }.sortedBy { it.startTime }
+        }
+        return availableDates!!
     }
 
     override fun toString(): String {
@@ -15,7 +26,7 @@ class Attendee(val name : String) {
 
     override fun equals(other: Any?): Boolean {
         if (other != null && other is Attendee) {
-            return name.equals(other.name)
+            return name == other.name
         }
         return false
     }

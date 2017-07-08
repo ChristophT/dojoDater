@@ -13,7 +13,7 @@ class AttendeeTest {
         val cand : Attendee = Attendee("tester")
         val dates: ArrayList<EventDate> = fillDateList()
 
-        val result = cand.getNumberOfPossibleDates(dates)
+        val result = cand.getNumberOfAvailableDates(dates)
 
         assertEquals(0, result)
     }
@@ -24,7 +24,7 @@ class AttendeeTest {
         val dates: ArrayList<EventDate> = fillDateList()
 
         dates[1].attendees.add(cand)
-        val result = cand.getNumberOfPossibleDates(dates)
+        val result = cand.getNumberOfAvailableDates(dates)
 
         assertEquals(1, result)
     }
@@ -37,7 +37,7 @@ class AttendeeTest {
         dates[1].attendees.add(cand)
         dates[3].attendees.add(cand)
 
-        val result = cand.getNumberOfPossibleDates(dates)
+        val result = cand.getNumberOfAvailableDates(dates)
         assertEquals(2, result)
     }
 
@@ -51,7 +51,7 @@ class AttendeeTest {
         dates[2].attendees.add(cand)
         dates[3].attendees.add(cand)
 
-        val result = cand.getNumberOfPossibleDates(dates)
+        val result = cand.getNumberOfAvailableDates(dates)
         assertEquals(4, result)
     }
 

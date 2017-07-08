@@ -41,7 +41,7 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
         val allAttendees: MutableList<Attendee> = eventDates.flatMap { it.attendees }.toSet().toMutableList()
         println("Scheduling ${allAttendees.size} attendees to ${eventDates.size} events.")
 
-        allAttendees.sortBy { it.getNumberOfPossibleDates(eventDates) }
+        allAttendees.sortBy { it.getNumberOfAvailableDates(eventDates) }
 
 
     }
