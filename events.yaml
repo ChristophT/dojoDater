@@ -1,7 +1,24 @@
 events:
     -
         startTime: '2017-07-18 14:00:00'
-        endTime: '2017-07-18 14:00:00'
+        endTime: '2017-07-18 15:30:00'
         attendees:
-            -
-                name: 'ich'
+            - name: 'Felix'
+            - name: 'ich'
+            - name: 'Moritz'
+    -
+        startTime: '2017-07-18 16:00:00'
+        endTime: '2017-07-18 17:30:00'
+        attendees:
+            - name: 'ich'
+            - name: 'Moritz'
+    -
+        startTime: '2017-07-19 08:30:00'
+        endTime: '2017-07-19 10:00:00'
+        attendees:
+            - name: 'ich'
+    -
+        startTime: '2017-07-19 10:30:00'
+        endTime: '2017-07-19 12:00:00'
+        attendees:
+            - name: 'ich'
