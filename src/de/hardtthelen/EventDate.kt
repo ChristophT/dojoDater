@@ -9,8 +9,8 @@ import java.util.*
  */
 const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
 
-class EventDate(@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT) val startTime: Date,
-                @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT) val endTime: Date) {
+class EventDate(@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT, timezone = "Europe/Berlin") val startTime: Date,
+                @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT, timezone = "Europe/Berlin") val endTime: Date) {
     val attendees: ArrayList<Attendee> = ArrayList()
 
     override fun toString(): String {
