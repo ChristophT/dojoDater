@@ -1,0 +1,14 @@
+events:
+    -
+        startTime: '2017-07-18 14:00:00'
+        endTime: '2017-07-18 15:30:00'
+        attendees:
+            - name: 'me'
+            - name: 'you'
+    -
+        startTime: '2017-07-18 16:00:00'
+        endTime: '2017-07-18 17:30:00'
+        attendees:
+            - name: 'me'
+            - name: 'you'
+            - name: 'he'
