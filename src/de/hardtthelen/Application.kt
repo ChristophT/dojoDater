@@ -13,7 +13,7 @@ import java.nio.file.Path
 
 fun main(args: Array<String>) {
     // read data file
-    val events: EventsDto = loadFromFile(FileSystems.getDefault().getPath("events.yaml"))
+    val events: EventsDto = loadFromFile(FileSystems.getDefault().getPath("data/events.yaml"))
 
     // create scheduler
     val scheduler = AttendenceScheduler(events.events)
