@@ -5,13 +5,15 @@ package de.hardtthelen
  */
 class AttendenceScheduler(val eventDates: List<EventDate>) {
     init {
-        collectEqualAttendees()
+        var allAttendees: List<Attendee>
+        allAttendees = collectEqualAttendees()
+        calculateAvailabelDates(allAttendees)
     }
 
     /**
      * clean duplicate objects for the same attendee (identified as defined in Attendee)
      */
-    private fun collectEqualAttendees() {
+    private fun collectEqualAttendees(): List<Attendee> {
         val knownAttendees: MutableList<Attendee> = ArrayList()
 
         for (event in eventDates) {
@@ -35,13 +37,24 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
                 }
             }
         }
+
+        return knownAttendees
+    }
+
+    /**
+     * Calculate the evenDates for each known attendee where he/she is available
+     */
+    private fun calculateAvailabelDates(allAttendees: List<Attendee>) {
+        for (attendee in allAttendees) {
+            attendee.calculateAvailableDates(eventDates)
+        }
     }
 
     fun scheduleAttendence(maxAttendeesPerEvent: Int) {
         val allAttendees: MutableList<Attendee> = eventDates.flatMap { it.attendees }.toSet().toMutableList()
         println("Scheduling ${allAttendees.size} attendees to ${eventDates.size} events.")
 
-        allAttendees.sortBy { it.getNumberOfAvailableDates(eventDates) }
+        allAttendees.sortBy { it.getNumberOfAvailableDates() }
 
 
     }

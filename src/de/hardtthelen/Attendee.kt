@@ -9,19 +9,23 @@ class Attendee(val name : String) {
 
     private var availableDates: List<EventDate>? = null
 
-    fun getNumberOfAvailableDates(dates: List<EventDate>): Int {
-        return getAvailableDates(dates).count()
+    fun getNumberOfAvailableDates(): Int {
+        return availableDates?.count() ?: 0
     }
 
-    fun getAvailableDates(dates: List<EventDate>): List<EventDate> {
-        if (availableDates == null) {
-            availableDates = dates.filter { it.attendees.contains(this) }.sortedBy { it.startTime }
-        }
+    fun calculateAvailableDates(dates: List<EventDate>) {
+        availableDates = dates.filter { it.attendees.contains(this) }.sortedBy { it.startTime }
+    }
+
+    fun getAvailableDates(): List<EventDate> {
         return availableDates!!
     }
 
     fun selectNextDate() {
+        var eventIndex: Int = 0;
+        if (selectedEvent == null) {
 
+        }
     }
 
     override fun toString(): String {

@@ -13,7 +13,8 @@ class AttendeeTest {
         val cand : Attendee = Attendee("tester")
         val dates: ArrayList<EventDate> = fillDateList()
 
-        val result = cand.getNumberOfAvailableDates(dates)
+        cand.calculateAvailableDates(dates)
+        val result = cand.getNumberOfAvailableDates()
 
         assertEquals(0, result)
     }
@@ -24,7 +25,8 @@ class AttendeeTest {
         val dates: ArrayList<EventDate> = fillDateList()
 
         dates[1].attendees.add(cand)
-        val result = cand.getNumberOfAvailableDates(dates)
+        cand.calculateAvailableDates(dates)
+        val result = cand.getNumberOfAvailableDates()
 
         assertEquals(1, result)
     }
@@ -37,7 +39,8 @@ class AttendeeTest {
         dates[1].attendees.add(cand)
         dates[3].attendees.add(cand)
 
-        val result = cand.getNumberOfAvailableDates(dates)
+        cand.calculateAvailableDates(dates)
+        val result = cand.getNumberOfAvailableDates()
         assertEquals(2, result)
     }
 
@@ -51,8 +54,22 @@ class AttendeeTest {
         dates[2].attendees.add(cand)
         dates[3].attendees.add(cand)
 
-        val result = cand.getNumberOfAvailableDates(dates)
+        cand.calculateAvailableDates(dates)
+        val result = cand.getNumberOfAvailableDates()
         assertEquals(4, result)
+    }
+
+    @Test
+    fun testAvailableDates() {
+        val cand : Attendee = Attendee("tester")
+        val dates: ArrayList<EventDate> = fillDateList()
+
+        dates[1].attendees.add(cand)
+        dates[2].attendees.add(cand)
+
+        cand.calculateAvailableDates(dates)
+
+        assertEquals(listOf(dates[1], dates[2]), cand.getAvailableDates())
     }
 
     private fun fillDateList(): ArrayList<EventDate> {
