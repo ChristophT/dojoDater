@@ -5,12 +5,12 @@ package de.hardtthelen
  */
 class Attendee(val name : String) {
 
-    private var selectedEvent: EventDate? = null
+    var selectedEvent: EventDate? = null
 
-    private var availableDates: List<EventDate>? = null
+    private var availableDates: List<EventDate> = ArrayList()
 
     fun getNumberOfAvailableDates(): Int {
-        return availableDates?.count() ?: 0
+        return availableDates.count() ?: 0
     }
 
     fun calculateAvailableDates(dates: List<EventDate>) {
@@ -18,14 +18,19 @@ class Attendee(val name : String) {
     }
 
     fun getAvailableDates(): List<EventDate> {
-        return availableDates!!
+        return availableDates
     }
 
-    fun selectNextDate() {
-        var eventIndex: Int = 0;
-        if (selectedEvent == null) {
-
+    fun selectNextDate(): Boolean {
+        var eventIndex: Int = availableDates.indexOf(selectedEvent)
+        eventIndex++
+        if (eventIndex < availableDates.size) {
+            selectedEvent = availableDates[eventIndex]
+            return true
+        } else {
+            selectedEvent = null
         }
+        return false
     }
 
     override fun toString(): String {

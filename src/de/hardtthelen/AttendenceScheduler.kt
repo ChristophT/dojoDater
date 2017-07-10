@@ -5,7 +5,7 @@ package de.hardtthelen
  */
 class AttendenceScheduler(val eventDates: List<EventDate>) {
     init {
-        var allAttendees: List<Attendee>
+        val allAttendees: List<Attendee>
         allAttendees = collectEqualAttendees()
         calculateAvailabelDates(allAttendees)
     }
@@ -52,10 +52,51 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
 
     fun scheduleAttendence(maxAttendeesPerEvent: Int) {
         val allAttendees: MutableList<Attendee> = eventDates.flatMap { it.attendees }.toSet().toMutableList()
+
         println("Scheduling ${allAttendees.size} attendees to ${eventDates.size} events.")
 
         allAttendees.sortBy { it.getNumberOfAvailableDates() }
 
+        scheduleAttendeeRange(allAttendees, 0, maxAttendeesPerEvent)
+    }
 
+    private fun scheduleAttendeeRange(allAttendees: MutableList<Attendee>, startIndex: Int, maxAttendeesPerEvent: Int,
+                                      allowBacktracking: Boolean = true) {
+        for (i in startIndex .. allAttendees.size - 1) {
+            var success: Boolean = selectNextAvailabeEvent(allAttendees, i, maxAttendeesPerEvent)
+            if (!success && allowBacktracking) {
+                success = backtrackEventSelection(allAttendees, i, maxAttendeesPerEvent)
+            }
+            if (!success){
+                throw RuntimeException("Can not schedule all attendees")
+            }
+        }
+    }
+
+    private fun backtrackEventSelection(allAttendees: MutableList<Attendee>, currentIndex: Int, maxAttendeesPerEvent: Int): Boolean{
+        for (i in currentIndex-1 downTo 0) {
+            selectNextAvailabeEvent(allAttendees, currentIndex, maxAttendeesPerEvent, true)
+        }
+        return true
+    }
+
+    private fun selectNextAvailabeEvent(allAttendees: MutableList<Attendee>, currentIndex: Int, maxAttendeesPerEvent: Int,
+                                        restartIfNeccessary: Boolean = false): Boolean {
+        var success: Boolean
+        val candidate = allAttendees[currentIndex]
+        do {
+            success = candidate.selectNextDate()
+            val selectedEvent = candidate.selectedEvent
+            if (selectedEvent != null && selectedEvent.acceptedAttendees.size < maxAttendeesPerEvent) {
+                selectedEvent.acceptedAttendees.add(candidate)
+                break
+            }
+        } while (!success)
+
+        if (!success && restartIfNeccessary) {
+            candidate.selectedEvent == null
+            success = selectNextAvailabeEvent(allAttendees, currentIndex, maxAttendeesPerEvent, false);
+        }
+        return success
     }
 }

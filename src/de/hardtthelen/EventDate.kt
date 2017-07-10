@@ -3,6 +3,7 @@ package de.hardtthelen
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Date of an event
@@ -13,6 +14,8 @@ class EventDate(@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT,
                 @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT, timezone = "Europe/Berlin") val endTime: Date) {
     val attendees: ArrayList<Attendee> = ArrayList()
 
+    val acceptedAttendees: MutableList<Attendee> = ArrayList()
+
     override fun toString(): String {
         val formatter : SimpleDateFormat = SimpleDateFormat(DATE_FORMAT)
         val sb : StringBuilder = StringBuilder()
@@ -20,8 +23,13 @@ class EventDate(@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=DATE_FORMAT,
         sb.append(formatter.format(startTime))
         sb.append(" - ")
         sb.append(formatter.format(endTime))
-        sb.append("\nAttendees:\n")
+        sb.append("\nPossible attendees:\n")
         for (attendee in attendees) {
+            sb.append(attendee.name)
+            sb.append("\n")
+        }
+        sb.append("\nAccepted attendees:\n")
+        for (attendee in acceptedAttendees) {
             sb.append(attendee.name)
             sb.append("\n")
         }

@@ -22,11 +22,13 @@ class EventDateTest {
         eventDate.attendees.add(Attendee("tester4"))
 
         assertEquals("""Timeslot: 2017-07-18 14:00:00 - 2017-07-18 15:30:00
-                    |Attendees:
+                    |Possible attendees:
                     |tester1
                     |tester2
                     |tester3
                     |tester4
+                    |
+                    |Accepted attendees:
                     |""".trimMargin()
         , eventDate.toString())
     }
