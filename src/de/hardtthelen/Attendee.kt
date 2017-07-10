@@ -5,7 +5,7 @@ package de.hardtthelen
  */
 class Attendee(val name : String) {
 
-    var chosenEvent: EventDate? = null
+    private var selectedEvent: EventDate? = null
 
     private var availableDates: List<EventDate>? = null
 
@@ -18,6 +18,10 @@ class Attendee(val name : String) {
             availableDates = dates.filter { it.attendees.contains(this) }.sortedBy { it.startTime }
         }
         return availableDates!!
+    }
+
+    fun selectNextDate() {
+
     }
 
     override fun toString(): String {
