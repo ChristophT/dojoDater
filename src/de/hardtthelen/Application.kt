@@ -18,10 +18,10 @@ fun main(args: Array<String>) {
     // create scheduler
     val scheduler = AttendenceScheduler(events.events)
 
-    scheduler.scheduleAttendence(12)
+    scheduler.scheduleAttendence(10)
 
     for (event in events.events) {
-        println(event)
+        println(event.toString(onlyAccepted = true))
         println()
     }
 }
