@@ -79,6 +79,7 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
     private fun scheduleAttendeeRange(allAttendees: MutableList<Attendee>, startIndex: Int, maxAttendeesPerEvent: Int,
                                       allowBacktracking: Boolean = true) {
         for (i in startIndex .. allAttendees.size - 1) {
+            println("in scheduleAttTange with index $i")
             var success: Boolean = selectNextAvailabeEvent(allAttendees[i], maxAttendeesPerEvent)
             if (!success && allowBacktracking) {
                 success = backtrackEventSelection(allAttendees, i, maxAttendeesPerEvent)
@@ -90,6 +91,8 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
     }
 
     private fun backtrackEventSelection(allAttendees: MutableList<Attendee>, currentIndex: Int, maxAttendeesPerEvent: Int): Boolean{
+        println("Backtracking from index $currentIndex")
+
         for (i in currentIndex-1 downTo 0) {
             val success = selectNextAvailabeEvent(allAttendees[currentIndex], maxAttendeesPerEvent, true)
             if (success) {
@@ -101,17 +104,22 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
 
     private fun selectNextAvailabeEvent(candidate: Attendee, maxAttendeesPerEvent: Int,
                                         restartIfNeccessary: Boolean = false): Boolean {
-        var success: Boolean
-        do {
+        var success: Boolean = false
+        for (i in 0 .. candidate.getNumberOfAvailableDates()) {
             success = candidate.selectNextDate()
+            println("Selecting next event for att ${candidate.name} with success==${success}")
+
             val selectedEvent = candidate.selectedEvent
             if (selectedEvent != null && selectedEvent.acceptedAttendees.size < maxAttendeesPerEvent) {
                 selectedEvent.acceptedAttendees.add(candidate)
                 break
             } else {
                 success = false
+                if (selectedEvent == null) {
+                    break
+                }
             }
-        } while (!success)
+        }
 
         if (!success && restartIfNeccessary) {
             candidate.selectedEvent = null
