@@ -29,8 +29,8 @@ class Attendee(val name : String) {
             return true
         } else {
             selectedEvent = null
+            return false
         }
-        return false
     }
 
     override fun toString(): String {

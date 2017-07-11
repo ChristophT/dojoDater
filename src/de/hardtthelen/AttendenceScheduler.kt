@@ -28,7 +28,7 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
                 val index = knownAttendees.indexOf(candidate)
                 if (index >= 0) {
                     // swap for known attendee
-                    val knownAttendee = knownAttendees.get(index)
+                    val knownAttendee = knownAttendees[index]
                     event.attendees.remove(candidate)
                     event.attendees.add(knownAttendee)
                 } else {
@@ -52,18 +52,34 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
 
     fun scheduleAttendence(maxAttendeesPerEvent: Int) {
         val allAttendees: MutableList<Attendee> = eventDates.flatMap { it.attendees }.toSet().toMutableList()
-
+        var firstAttendeeWithMultipleDates: Int = 0
         println("Scheduling ${allAttendees.size} attendees to ${eventDates.size} events.")
 
         allAttendees.sortBy { it.getNumberOfAvailableDates() }
 
-        scheduleAttendeeRange(allAttendees, 0, maxAttendeesPerEvent)
+        for (i in 0 .. allAttendees.size) {
+            val candidate = allAttendees[i]
+            if (candidate.getNumberOfAvailableDates() > 1) {
+                firstAttendeeWithMultipleDates = i
+                break
+            } else {
+                candidate.selectNextDate()
+                val selectedEvent: EventDate = candidate.selectedEvent!!
+                if (selectedEvent.acceptedAttendees.size < maxAttendeesPerEvent) {
+                    selectedEvent.acceptedAttendees.add(candidate)
+                } else {
+                    throw RuntimeException("Can not schedule all attendees with a single available date.")
+                }
+            }
+        }
+
+        scheduleAttendeeRange(allAttendees, firstAttendeeWithMultipleDates, maxAttendeesPerEvent)
     }
 
     private fun scheduleAttendeeRange(allAttendees: MutableList<Attendee>, startIndex: Int, maxAttendeesPerEvent: Int,
                                       allowBacktracking: Boolean = true) {
         for (i in startIndex .. allAttendees.size - 1) {
-            var success: Boolean = selectNextAvailabeEvent(allAttendees, i, maxAttendeesPerEvent)
+            var success: Boolean = selectNextAvailabeEvent(allAttendees[i], maxAttendeesPerEvent)
             if (!success && allowBacktracking) {
                 success = backtrackEventSelection(allAttendees, i, maxAttendeesPerEvent)
             }
@@ -75,27 +91,31 @@ class AttendenceScheduler(val eventDates: List<EventDate>) {
 
     private fun backtrackEventSelection(allAttendees: MutableList<Attendee>, currentIndex: Int, maxAttendeesPerEvent: Int): Boolean{
         for (i in currentIndex-1 downTo 0) {
-            selectNextAvailabeEvent(allAttendees, currentIndex, maxAttendeesPerEvent, true)
+            val success = selectNextAvailabeEvent(allAttendees[currentIndex], maxAttendeesPerEvent, true)
+            if (success) {
+                scheduleAttendeeRange(allAttendees, i+1, maxAttendeesPerEvent, false)
+            }
         }
         return true
     }
 
-    private fun selectNextAvailabeEvent(allAttendees: MutableList<Attendee>, currentIndex: Int, maxAttendeesPerEvent: Int,
+    private fun selectNextAvailabeEvent(candidate: Attendee, maxAttendeesPerEvent: Int,
                                         restartIfNeccessary: Boolean = false): Boolean {
         var success: Boolean
-        val candidate = allAttendees[currentIndex]
         do {
             success = candidate.selectNextDate()
             val selectedEvent = candidate.selectedEvent
             if (selectedEvent != null && selectedEvent.acceptedAttendees.size < maxAttendeesPerEvent) {
                 selectedEvent.acceptedAttendees.add(candidate)
                 break
+            } else {
+                success = false
             }
         } while (!success)
 
         if (!success && restartIfNeccessary) {
-            candidate.selectedEvent == null
-            success = selectNextAvailabeEvent(allAttendees, currentIndex, maxAttendeesPerEvent, false);
+            candidate.selectedEvent = null
+            success = selectNextAvailabeEvent(candidate, maxAttendeesPerEvent, false)
         }
         return success
     }
